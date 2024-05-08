@@ -48,6 +48,7 @@ public:
   */
   void Retrieve(size_t len);
   void RetrieveUntil(const char* end);
+  // 移出缓冲区中的所有数据
   void RetrieveAll();
   
   std::string RetrieveAllToStr();

@@ -24,7 +24,13 @@ public:
   
   // 用于获取Log类的单例实例
   static Log* Instance();
+
   /*
+    (
+      是不是其中还有创建的意思？
+      因为在实现的时候启动新线程的时候是以这个函数作为线程的入口
+      详细见log.cpp::64
+    )
    启动异步写入日志的线程
    这个函数还没太搞懂
   */
@@ -50,7 +56,7 @@ private:
   /*
     异步写入日志到文件
   */
-  void AsyncWrite();
+  void AsyncWrite_();
 
 private:
   static const int LOG_PATH_LEN = 256;
@@ -60,9 +66,10 @@ private:
   const char* path_;
   const char* suffix_;
   
+  // 日志的最大行数
   int MAX_LINES_;
   
-  int lineCount;
+  int lineCount_;
   // 用于标记是否到了新的日志
   int toDay_;
   
@@ -88,7 +95,7 @@ private:
 #define LOG_BASE(level, format, ...) \
   do { \
     Log* log = Log::Instance(); \
-    if(log->isOpen() && log->GetLevel() <= level) { \
+    if(log->IsOpen() && log->GetLevel() <= level) { \
       log->write(level, format, ##__VA_ARGS__); \
       log->flush(); \
     } \
